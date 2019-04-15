@@ -3,11 +3,13 @@
 *@author ghouibi ghassen
 *@date April 2019
 */
+
+path="C:\Users\XYZ\Desktop\";
 f=figure('figure_position',[190,50],...
 'figure_size',[1050,650],...
 'auto_resize','on',...
 'background',[2],...
-'figure_name','Object recognition',...
+'figure_name','Projet Traitement d images de signal',...
 'dockable','off',...
 'infobar_visible','off',...
 'toolbar_visible','off',...
@@ -712,61 +714,61 @@ function NumberDetection(handles)
     InvertedImage = uint8(255 * ones(size(Image,1), size(Image,2))) - Image;
     //imshow(InvertedImage);
     a=0;
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\0\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\0\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     
     for i = 0:number
-       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\0\0-'+string(i)+'.jpg');
-       imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+       image=imread(path+'Object-recognition\numbers\0\0-'+string(i)+'.jpg');
+       imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+         trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
         messagebox("This is 0");
         a=1;
         end
     end
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\1\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\1\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     for i = 0:number
-       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\1\1-'+string(i)+'.jpg');
-       imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+       image=imread(path+'Object-recognition\numbers\1\1-'+string(i)+'.jpg');
+       imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+         trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
         messagebox("This is 1");
         a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\2\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\2\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     for i = 1:number
-         image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\2\2-'+string(i)+'.jpg');
-         imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+         image=imread(path+'Object-recognition\numbers\2\2-'+string(i)+'.jpg');
+         imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+         trained=imread(path+'Object-recognition\numbers\train\train.jpg');
          if trained == image then
              messagebox("This is 2 found");
              a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\3\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\3\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     
     for i = 0:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\3\3-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\3\3-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
             messagebox("This is 3 ");
             a=1;
@@ -775,91 +777,93 @@ function NumberDetection(handles)
     
     
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\4\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\4\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     
     for i = 0:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\4\4-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\4\4-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
             messagebox("This is 4");
             a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\5\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\5\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     
     for i = 0:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\5\5-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\5\5-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
             messagebox("This is 5");
             a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\6\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\6\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     for i = 1:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\6\6-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\6\6-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
             messagebox("This is 6");
             a=1
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\7\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\7\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     disp(number);
     for i = 1:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\7\7-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\7\7-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if trained == image then
             messagebox("This 7");
             a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\8\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\8\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     
     for i = 1:number
-        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\8\8-'+string(i)+'.jpg');
-        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
-        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        image=imread(path+'Object-recognition\numbers\8\8-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
         if imagePicked == image then
             messagebox("This is 8");
             a=1;
         end
     end
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\9\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\9\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
     
     for i = 1:number
-       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\9\9-'+string(i)+'.jpg');
-        if imagePicked == image then
+        image=imread(path+'Object-recognition\numbers\9\9-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string(path+"Object-recognition\numbers\train\train.jpg"));
+        trained=imread(path+'Object-recognition\numbers\train\train.jpg');
+        if trained == image then
             messagebox("This is 9");
             a=1;
         end
@@ -873,7 +877,7 @@ function NumberDetection(handles)
 endfunction
 
 /*
-* This function is for algorithm in python (Convonlutional neural network)
+* Training DATA
 */
 function Train(handles)
     image=handles.OriginalImage;
@@ -884,16 +888,17 @@ function Train(handles)
     response=x_dialog('which number is this ?',['']);
     disp(response);
     
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\numbers.txt','r');
+    fd=mopen(path+'Object-recognition\numbers\'+response+'\numbers.txt','r');
     x=mgetl(fd,10);
     number=strtod(x);
     mclose(fd);
-    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\numbers.txt','w');
+    
+    fd=mopen(path+'Object-recognition\numbers\'+response+'\numbers.txt','w');
     counter=number+1;
     mputstr(string(counter));
     mclose(fd);
     
-    imwrite(InvertedImage,string('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\'+response+'-'+string(counter)+".jpg"));
+    imwrite(InvertedImage,string(path+'Object-recognition\numbers\'+response+'\'+response+'-'+string(counter)+".jpg"));
     //handles.CopyImage=image;
     imshow(image);
     handles=resume(handles);
@@ -922,7 +927,7 @@ endfunction
 *This function juste load an white image background
 */
 function Clear(handles)
-    clearing=imread('C:\Users\XYZ\Desktop\Object-recognition\reset.jpg');
+    clearing=imread(path+'Object-recognition\reset.jpg');
     imshow(clearing);
     handles.CopyImage=clearing;
     handles.OriginalImage=clearing;
@@ -932,5 +937,5 @@ endfunction
 * This function display how this program work
 */
 function Help(handles) 
-    messagebox("Hello users button on the right are for filter picture     the silder button for","Help", ["OK"]);
+    messagebox("Hello users button on the right are for filter picture     the right button for picture recognition","Help", ["OK"]);
 endfunction
