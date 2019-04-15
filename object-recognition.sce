@@ -15,10 +15,7 @@ f=figure('figure_position',[190,50],...
 'default_axes','on',...
 'visible','off');
 
-
 handles.dummy = 0;
-
-
 
 //Original
 handles.Original=uicontrol(f,...
@@ -73,8 +70,8 @@ handles.Mirror=uicontrol(f,...
 'Callback','Mirror(handles)')
 
 
-//Flou filter
-handles.Flou=uicontrol(f,...
+//blurring filter
+handles.blurring=uicontrol(f,...
 'unit','normalized',...
 'BackgroundColor',[-1,-1,-1],...
 'Enable','on',...
@@ -91,13 +88,13 @@ handles.Flou=uicontrol(f,...
 'Position',[0.001,0.68,0.13,0.07],...
 'Relief','default',...
 'SliderStep',[0.01,0.01],...
-'String','Flou',...
+'String','Blurring',...
 'Style','slider',...
 'Value',[0],...
 'VerticalAlignment','middle',...
 'Visible','on',...
 'Tag','Flou',...
-'Callback','Flou(handles)')
+'Callback','Blurring(handles)')
 
 
 //Grey Filter
@@ -153,7 +150,7 @@ handles.SobelFilter=uicontrol(f,...
 'Callback','Sobel(handles)')
 
 //Laplacian
-handles.newFilter=uicontrol(f,...
+handles.Laplacian=uicontrol(f,...
 'unit','normalized',...
 'BackgroundColor',[-1,-1,-1],...
 'Enable','on',...
@@ -364,7 +361,7 @@ handles.numberDetection=uicontrol(f,...
 
 
 //CNN init
-handles.InitCNN=uicontrol(f,...
+handles.train=uicontrol(f,...
 'unit','normalized',...
 'BackgroundColor',[-1,-1,-1],...
 'Enable','on',...
@@ -381,13 +378,13 @@ handles.InitCNN=uicontrol(f,...
 'Position',[0.83,0.48,0.13,0.07],...
 'Relief','default',...
 'SliderStep',[0.01,0.01],...
-'String','CNN Init',...
+'String','Train',...
 'Style','pushbutton',...
 'Value',[0],...
 'VerticalAlignment','middle',...
 'Visible','on',...
-'Tag','CNN',...
-'Callback','InitCNN(handles)')
+'Tag','Train',...
+'Callback','Train(handles)')
 
 //live webcam
 handles.LiveWebCam=uicontrol(f,...
@@ -396,7 +393,7 @@ handles.LiveWebCam=uicontrol(f,...
 'Enable','on',...
 'FontAngle','normal',...
 'FontName','Tahoma',...
-'FontSize',[13],...
+'FontSize',[11],...
 'FontUnits','points',...
 'FontWeight','normal',...
 'ForegroundColor',[-1,-1,-1],...
@@ -408,7 +405,7 @@ handles.LiveWebCam=uicontrol(f,...
 'Relief','default',...
 'SliderStep',[0.01,0.01],...
 'String','Live Webcam',...
-'Style','radiobutton',...
+'Style','pushbutton',...
 'Value',[0],...
 'VerticalAlignment','middle',...
 'Visible','on',...
@@ -423,7 +420,7 @@ handles.close=uicontrol(f,...
 'Enable','on',...
 'FontAngle','normal',...
 'FontName','Tahoma',...
-'FontSize',[13],...
+'FontSize',[11],...
 'FontUnits','points',...
 'FontWeight','normal',...
 'ForegroundColor',[-1,-1,-1],...
@@ -510,49 +507,43 @@ f.visible = "on";
 * Getting the original version of picture
 */
 function Original(handles)
-    disp("Original");
-    S2 = handles.S;
-    imshow(S2);
-    handles.S2 = S2;
+    image = handles.OriginalImage;
+    imshow(image);
+    handles.CopyImage= image;
     handles = resume(handles);
 endfunction
 /*
 * Making mirror effet
 */
 function Mirror(handles)
-    
-    a=~handles.M;
-    disp(a);
-    if a then
-        S2 = handles.S2(:,$:-1:1,:);
+    test=~handles.MirrorImage;
+    if test then
+        image = handles.CopyImage(:,$:-1:1,:);
     else
-        S2=handles.S;
+        image = handles.OriginalImage;
     end
-    
-    imshow(S2);
-    handles.M=a;
-    handles.S2 = S2;
+    imshow(image);
+    handles.MirrorImage=test;
+    handles.CopyImage = image;
     handles = resume(handles);
 endfunction
+
 /*
 * Flotting the picture
 */
-function Flou(handles)
-    disp("Flou");
-    F = handles.S;
-    x=get(handles.Flou,'value')
-    y=round(x/10);
-    disp(y);
-    if y==0 then
-        e=handles.S;
+function Blurring(handles)
+    image = handles.OriginalImage;
+    x=round(get(handles.blurring,'value')/10);
+    disp(x);
+    if x==0 then
+        image=handles.OriginalImage;
     else
-        filter = fspecial('average',y);
-        e = imfilter(F, filter);
+        filter = fspecial('average',x);
+        image = imfilter(image, filter);
     end
 
-    imshow(e);
-    disp(typeof(e));
-    handles.S2 = e;
+    imshow(image);
+    handles.CopyImage = image;
     handles = resume(handles);
     
 endfunction
@@ -560,25 +551,20 @@ endfunction
 * Applicate Grey filter
 */
 function GreyFilter(handles)
-    disp(handles.S)
-    S2 = rgb2gray(handles.S2);
-    disp(typeof(S2));
-    imshow(S2);
-    handles.S2 = S2;
+    image = rgb2gray(handles.CopyImage);
+    imshow(image);
+    handles.CopyImage = image;
     handles = resume(handles);
 endfunction
 /*
 * Applicate Sobel filter
 */
 function Sobel(handles)
-   disp("Sobel");
-    S2 = handles.S2;
+    image = handles.CopyImage;
     filter = fspecial('sobel'); 
-    FSImg = imfilter(S2, filter);
-    imshow(FSImg);
-    handles.S=S2;
-    handles.S2 = FSImg;
-    handles.S3 ="Sobel";
+    image = imfilter(image, filter);
+    imshow(image);
+    handles.CopyImage = image;
     handles = resume(handles);
 endfunction
 
@@ -586,51 +572,54 @@ endfunction
 * Applicate Laplacian filter
 */
 function Laplacian(handles)
-    disp("Laplacian");
-    S2 = handles.S2;
+    image = handles.CopyImage;
     filter = fspecial('laplacian',0);
-    imf = filter2(S2,filter);
-    e = im2uint8(imf)
-    imshow(e);  
-    handles.S=S2;
-    handles.S2 = e ;
+    image = filter2(image,filter);
+    image = im2uint8(image)
+    imshow(image);  
+    handles.CopyImage = image ;
     handles = resume(handles);
 endfunction
-
 
 /*
-* This function zoom the image with crop in the zone choosed by the user
+* This function zoom in the image with crop in the zone choosed by the user
 */
 function ZoomIn(handles)
-    im = handles.S2;
+    handles.BeforeZoom=handles.CopyImage;
+    image = handles.CopyImage;
     rect1=rubberbox();
-    imheight=size(im,"r");
-    disp(imheight);
+    imheight=size(image,"r");
+
     rect1(2)=imheight-rect1(2);   
-    zoomed=imcrop(im,rect1);
+    zoomed=imcrop(image,rect1);
     imshow(zoomed);
     height=size(zoomed,"r");
-    handles.S2=zoomed;
+    handles.CopyImage=zoomed;
     handles = resume(handles);
+
 endfunction
 
-//TODO
+/*
+* This function zoom out the image with crop in the zone choosed by the user
+*/
 function ZoomOut(handles)
-
+    imshow(handles.BeforeZoom);
+    if handles.CopyImage==handles.BeforeZoom then
+        handles.BeforeZoom=handles.OriginalImage;
+    end
+    handles.CopyImage=handles.BeforeZoom;
+    handles = resume(handles);
 endfunction
 
 /*
 *This function save current image shown in the canvas 
 */
 function SaveIMG(handles)
-    
-   disp("Saving Picture");
-   imageTosave=handles.S2;
+   imageTosave=handles.CopyImage;
    imshow(imageTosave);
    [fileName,filePath]=uiputfile(["*.jpeg"; "*.png"; "*.jpg"]);
    fileName=fullfile(filePath,fileName);
    imwrite(imageTosave,string(fileName+".jpg"));
-
 endfunction
 
 /*--------------right buttons function-----------------------------*/
@@ -639,14 +628,12 @@ endfunction
 * This function load a new image and display it
 */
 function LoadIMG(handles)
-    disp("LoadIMG"); 
-    fn = uigetfile('*'); 
-    disp(fn);
-    S = imread(fn);
-    imshow(S);
-    handles.S = S;
-    handles.S2=S;
-    handles.M =0;
+    filePath = uigetfile('*'); 
+    image = imread(filePath);
+    imshow(image);
+    handles.OriginalImage = image;
+    handles.CopyImage     = image;
+    handles.MirrorImage   =0;
     handles = resume(handles);
 endfunction
 
@@ -654,77 +641,273 @@ endfunction
 *This function allow to user to take photo with webcam
 */
 function TakePhoto(handles)
-    n = camopen(0);
-    S = camread(n); //get a frame
-    imshow(S);
+    cam = camopen(0);
+    image = camread(cam); //get a frame
+    imshow(image);
     camcloseall();
-    handles.S = S;
-    handles.M = 0;
+    handles.OriginalImage = image;
+    handles.CopyImage     = image;
+    handles.MirrorImage   = 0;
     handles = resume(handles);
 endfunction
 
 /*
 * This function detect white object in a image
+    @adapted from scilab/help
 */
 function ObjectDetect(handles)
-    im=handles.S;
-    imshow(im);
-    S2=rgb2gray(im);
-    S3=S2>180;
-    handles.S3=S3;
-    winId=progressionbar('Do something');
+    image=handles.CopyImage;
+    imshow(image);
+    
+    winId=progressionbar('Object detection in progress');
     realtimeinit(0.3);
     for j=0:0.1:1,
       realtime(3*j);
-      progressionbar(winId+3);
+      progressionbar(winId);
     end
     close(winId);
+
+    response=x_dialog('Want to see progress ? Yes Or No ',['Yes'])
+    disp(response);
     
+    Image = rgb2gray(image);
+    //Invervet Image to black to white & white to black
+    InvertedImage = uint8(255 * ones(size(Image,1), size(Image,2))) - Image;
+    Threshold=100;
+
+    level=Threshold/255;
+    if response=='Yes' then
+        imshow(InvertedImage);
+    end
+    LogicalImage = im2bw(InvertedImage, level);
+    
+     if response=='Yes' then
+        imshow(LogicalImage);
+    end
+    //Create strcut element
+    
+    StructureElement = imcreatese('rect',50,51);
+    FilteredLogicalImage = imclose(LogicalImage,StructureElement)
+    
+    [ObjectImage,n] = imlabel(FilteredLogicalImage);
+    //getting the binding box
+    [Area, BB] = imblobprop(ObjectImage);
+    f4=scf(4);
+    f4.name='Result';
+    imshow(image);
+    imrects(BB,[0 255 0]);
+    handles = resume(handles);
+
 endfunction
 
 /*
 * This function detect numbers in a image
 */
 function NumberDetection(handles)
-    im=handles.S;
-    imshow(im);
-    S2=rgb2gray(im);
-    [row,col]=find(S2==255);    //row & column indices where IM = 1 (= edge)
-disp([row',col'],"Egde coordinates (row, col)");
-    // L'échantillon aléatoire gaussien
-d = rand(1, 10000, 'normal');
-
-[cf, ind] = histc(20, 10, normalization=%f)
-// On utilise histplot pour avoir une représentation graphique
- histplot(20, 10, normalization=%f);
+    imagePicked=handles.OriginalImage;
+    Image = rgb2gray(imagePicked);
+    imshow(Image);
     
+    //Invervet Image to black to white & white to black
+    InvertedImage = uint8(255 * ones(size(Image,1), size(Image,2))) - Image;
+    //imshow(InvertedImage);
+    a=0;
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\0\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    
+    for i = 0:number
+       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\0\0-'+string(i)+'.jpg');
+       imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+        messagebox("This is 0");
+        a=1;
+        end
+    end
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\1\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    for i = 0:number
+       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\1\1-'+string(i)+'.jpg');
+       imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+        messagebox("This is 1");
+        a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\2\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    for i = 1:number
+         image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\2\2-'+string(i)+'.jpg');
+         imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+         trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+         if trained == image then
+             messagebox("This is 2 found");
+             a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\3\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    
+    for i = 0:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\3\3-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+            messagebox("This is 3 ");
+            a=1;
+        end
+    end
+    
+    
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\4\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    
+    for i = 0:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\4\4-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+            messagebox("This is 4");
+            a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\5\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    
+    for i = 0:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\5\5-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+            messagebox("This is 5");
+            a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\6\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    for i = 1:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\6\6-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+            messagebox("This is 6");
+            a=1
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\7\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    disp(number);
+    for i = 1:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\7\7-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if trained == image then
+            messagebox("This 7");
+            a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\8\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    
+    for i = 1:number
+        image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\8\8-'+string(i)+'.jpg');
+        imwrite(InvertedImage,string("C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg"));
+        trained=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\train\train.jpg');
+        if imagePicked == image then
+            messagebox("This is 8");
+            a=1;
+        end
+    end
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\9\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    
+    for i = 1:number
+       image=imread('C:\Users\XYZ\Desktop\Object-recognition\numbers\9\9-'+string(i)+'.jpg');
+        if imagePicked == image then
+            messagebox("This is 9");
+            a=1;
+        end
+    end
+    
+    if a==0 then
+        messagebox("I don t have this in my data base and i can t figure out the number please use Train ");
+    end
+    
+    handles = resume(handles);
 endfunction
 
 /*
 * This function is for algorithm in python (Convonlutional neural network)
 */
-function InitCNN(handles)
-    disp(handles.S)
+function Train(handles)
+    image=handles.OriginalImage;
+    Image = rgb2gray(image);
+    //Invervet Image color
+    InvertedImage = uint8(255 * ones(size(Image,1), size(Image,2))) - Image;
+    imshow(InvertedImage);
+    response=x_dialog('which number is this ?',['']);
+    disp(response);
+    
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\numbers.txt','r');
+    x=mgetl(fd,10);
+    number=strtod(x);
+    mclose(fd);
+    fd=mopen('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\numbers.txt','w');
+    counter=number+1;
+    mputstr(string(counter));
+    mclose(fd);
+    
+    imwrite(InvertedImage,string('C:\Users\XYZ\Desktop\Object-recognition\numbers\'+response+'\'+response+'-'+string(counter)+".jpg"));
+    //handles.CopyImage=image;
+    imshow(image);
+    handles=resume(handles);
 endfunction
 /*
 *This function open a live webcam streaming
 */
 function LiveWebcam(handles)
-    handles.web=1;
-    n = camopen(0);
-    im = camread(n); //get a frame
-    handles.web=1;
-    imshow(im);
-    tic();
-    for cnt = 1:150
-        
-        disp(handles.web)
-        im = camread(n);
-        imshow(im);
+    cam = camopen(0)
+    for cnt = 1:100
+        image = camread(cam);
+        imshow(image);
     end
-    t = toc();
-    disp("FPS : " + string(100/t));
-    //handles.S = S;
+    handles.CopyImage = image;
     handles = resume(handles);
 endfunction
 
@@ -732,25 +915,22 @@ endfunction
 * This function close webcam the program
 */
 function Close(handles)
-    disp("Clossing");
-    handles.web=0;
     camcloseall();
     handles = resume(handles);
-    return 0;
 endfunction
 /*
 *This function juste load an white image background
-* //TODO
 */
 function Clear(handles)
-    S=imread('C:\Users\XYZ\Desktop\Object-recognition\reset.jpg');
-    imshow(S);
-    handles.S=S;
+    clearing=imread('C:\Users\XYZ\Desktop\Object-recognition\reset.jpg');
+    imshow(clearing);
+    handles.CopyImage=clearing;
+    handles.OriginalImage=clearing;
     handles=resume(handles);
 endfunction
 /*
 * This function display how this program work
 */
 function Help(handles) 
-    messagebox("message comming soon","Help", ["Yes" "No"]);
+    messagebox("Hello users button on the right are for filter picture     the silder button for","Help", ["OK"]);
 endfunction
